@@ -10,7 +10,7 @@ public class Snake implements KeyListener{
 	private final int DOWN=2;
 	private final int LEFT=3;
 	private final int RIGHT=4;
-	private int dir, dr=10;
+	private int dir=UP, dr=10;
 	private ArrayList<int[]> body;
 
 	public Snake(ArrayList<int[]> start){
@@ -26,18 +26,19 @@ public class Snake implements KeyListener{
 	public ArrayList<int[]> move(){
 		//Increment head joint position by dr based on dir
 		if(dir==UP)
-			body.get(1)[1]-=dr;
+			body.get(0)[1]-=dr;
 		else if(dir==DOWN)
-			body.get(1)[1]+=dr;
+			body.get(0)[1]+=dr;
 		else if(dir==LEFT)
-			body.get(1)[0]-=dr;
+			body.get(0)[0]-=dr;
 		else if(dir==RIGHT)
-			body.get(1)[0]+=dr;
+			body.get(0)[0]+=dr;
 		//advance joints by setting position of each to position of preceeding joint
 		for(int[] x:body){
-			if(body.indexOf(x)>0)
+			if(body.indexOf(x)>0){
 				x[0]=body.get(body.indexOf(x)-1)[0];
 				x[1]=body.get(body.indexOf(x)-1)[1];
+			}
 		}
 		return body;
 	}
