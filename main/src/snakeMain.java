@@ -4,13 +4,13 @@ import javax.swing.JFrame;
 import java.awt.EventQueue;
 import java.awt.BorderLayout;
 
-public class snake extends JFrame{
+public class snakeMain extends JFrame{
 
 	//Constants for board size
 	private final int xdim = 640;
 	private final int ydim = 480;
 
-	public snake(String title){
+	public snakMain(String title){
 		setTitle(title);
 		setSize(xdim,ydim);
 		setResizable(false);
@@ -27,7 +27,7 @@ public class snake extends JFrame{
 
 			@Override
 			public void run() {
-				JFrame game = new snake("Snake by Andrew Hild");
+				JFrame game = new snakeMain("Snake by Andrew Hild");
 			}
 		});
 		
