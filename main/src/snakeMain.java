@@ -10,7 +10,7 @@ public class snakeMain extends JFrame{
 	private final int xdim = 640;
 	private final int ydim = 480;
 
-	public snakMain(String title){
+	public snakeMain(String title){
 		setTitle(title);
 		setSize(xdim,ydim);
 		setResizable(false);
