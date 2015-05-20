@@ -24,6 +24,11 @@ public class Snake implements Directions{
 		return dir;
 	}
 
+	//return body joint positions
+	public ArrayList<int[]> getPos(){
+		return body;
+	}
+
 	//Increment body positions in given direction
 	public ArrayList<int[]> move(){
 		//advance joints by setting position of each to position of preceeding joint

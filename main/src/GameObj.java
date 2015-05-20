@@ -14,10 +14,10 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 
 	private int xdim, ydim;
 	//Timer pings every 17 ms for ~60fps framerate
-	private final int TICK=500;
+	private final int TICK=100;
 	private final int jointSize = 10;
 	//private long t0;
-	private boolean active=true;
+	private boolean paused=false,inGame=true,hit=false;
 	private Snake player;
 	private Food noms;
 	private Timer timer;
@@ -39,6 +39,48 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 		//nom nom nom
 		noms = new Food(xdim,ydim);
 
+	}
+
+	//check for collisions with self, walls, food
+	private boolean checkCollision(){
+		ArrayList<int[]> snakePos=player.getPos();
+		int[] headPos=snakePos.get(0);
+		int[] nomPos = noms.getPos();
+		//check for nommed food
+		if(headPos[0]-nomPos[0]<=5&&headPos[1]-nomPos[1]<=5)
+			player.eat();
+		//check for wall smack
+		if(headPos[0]==0||headPos[0]==xdim||headPos[1]==0||headPos[1]==ydim){
+			System.out.println("A hit! A very palpable hit!");
+			hit=true;
+			inGame=false;
+			return hit;
+		}
+		//check for self smack
+		for(int[] x:snakePos){
+			if(snakePos.indexOf(x)>0){
+				if(headPos[0]==x[0]&&headPos[1]==x[1]){
+					System.out.println("I took by the throat the circumcised dog,/And smote him, thus.");
+					hit=true;
+					inGame=false;
+					return hit;
+				}
+			}
+		}
+		return hit;
+	}
+
+	//handle pausing of game
+	private boolean pause(){
+		if(paused){
+			timer.start();
+			paused=!paused;
+		}
+		else{
+			timer.stop();
+			paused=!paused;
+		}
+		return paused;
 	}
 
 	public void keyPressed(KeyEvent e) {
@@ -70,18 +112,18 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 		}
 		//Pause
 		else if(code==KeyEvent.VK_P)
-			active=(!active);
+			pause();
 	}
 
-
 	public void actionPerformed(ActionEvent e){
-		if(!active)
+		if(!inGame){
 			timer.stop();
+			System.out.println("noot noot!");
+		}
 		else{
 			Graphics g = getGraphics();
 			paint(g);
 		}
-
 	}
 
 	public void paint(Graphics g) {
@@ -100,6 +142,4 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 
 	public void keyReleased(KeyEvent e) {}
 	public void keyTyped(KeyEvent e) {}
-
-
 }
