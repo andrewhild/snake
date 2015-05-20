@@ -2,6 +2,7 @@ package main;
 
 import java.awt.Graphics;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.ActionEvent;
@@ -24,6 +25,7 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 	public GameObj(int x, int y){
 		xdim=x;
 		ydim=y;
+		setPreferredSize(new Dimension(xdim,ydim));
 		setFocusable(true);
 		addKeyListener(this);
 		timer = new Timer(TICK,this);
@@ -47,11 +49,12 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 		int[] headPos=snakePos.get(0);
 		int[] nomPos = noms.getPos();
 		//check for nommed food
-		if(headPos[0]-nomPos[0]<=5&&headPos[1]-nomPos[1]<=5)
+		if(((headPos[0]-nomPos[0])<=5)&&((headPos[1]-nomPos[1])<=5)){
 			player.eat();
+			noms=new Food(xdim,ydim);
+		}
 		//check for wall smack
-		if(headPos[0]==0||headPos[0]==xdim||headPos[1]==0||headPos[1]==ydim){
-			System.out.println("A hit! A very palpable hit!");
+		if(headPos[0]<0||headPos[0]>xdim||headPos[1]<0||headPos[1]>ydim){
 			hit=true;
 			inGame=false;
 			return hit;
@@ -59,8 +62,7 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 		//check for self smack
 		for(int[] x:snakePos){
 			if(snakePos.indexOf(x)>0){
-				if(headPos[0]==x[0]&&headPos[1]==x[1]){
-					System.out.println("I took by the throat the circumcised dog,/And smote him, thus.");
+				if((headPos[0]==x[0])&&(headPos[1]==x[1])){
 					hit=true;
 					inGame=false;
 					return hit;
@@ -121,8 +123,11 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 			System.out.println("noot noot!");
 		}
 		else{
-			Graphics g = getGraphics();
-			paint(g);
+			hit=checkCollision();
+			if(!hit){
+				Graphics g = getGraphics();
+				paint(g);
+			}
 		}
 	}
 

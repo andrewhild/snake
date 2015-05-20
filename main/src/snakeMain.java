@@ -12,13 +12,11 @@ public class snakeMain extends JFrame{
 
 	public snakeMain(String title){
 		setTitle(title);
-		setSize(xdim,ydim);
-		setResizable(false);
-		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		add(new GameObj(xdim,ydim),BorderLayout.CENTER);
-		setVisible(true);
-
+		add(new GameObj(xdim,ydim));
+		setResizable(false);
+		pack();
+		setLocationRelativeTo(null);
 	}
 
 	public static void main(String[] args) {
@@ -28,6 +26,7 @@ public class snakeMain extends JFrame{
 			@Override
 			public void run() {
 				JFrame game = new snakeMain("Snake by Andrew Hild");
+				game.setVisible(true);
 			}
 		});
 		
