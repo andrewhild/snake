@@ -16,7 +16,7 @@ import javax.swing.Timer;
 
 public class GameObj extends JPanel implements KeyListener,ActionListener,Directions{
 
-	private int xdim, ydim;
+	private int xdim, ydim, points=0;
 	//Timer pings every 17 ms for ~60fps framerate
 	private final int TICK=100;
 	private final int jointSize = 10;
@@ -25,6 +25,8 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 	private Snake player;
 	private Food noms;
 	private Timer timer;
+	private Font f;
+	private FontMetrics fm;
 	public GameObj(int x, int y){
 		xdim=x;
 		ydim=y;
@@ -44,6 +46,9 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 		player = new Snake(start);
 		//nom nom nom
 		noms = new Food(xdim,ydim);
+		////Graphics objects
+		f = new Font("Courier New", Font.BOLD, 14);
+		fm = getFontMetrics(f);
 
 	}
 
@@ -55,6 +60,7 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 		//check for nommed food
 		if((Math.abs(headPos[0]-nomPos[0])<=5)&&(Math.abs(headPos[1]-nomPos[1])<=5)){
 			player.eat();
+			points++;
 			noms=new Food(xdim,ydim);
 		}
 		//check for wall smack
@@ -121,42 +127,44 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 			pause();
 	}
 
-	private void gameOver(){
+	private void gameOver(Graphics g){
 		String lose = "Game Over";
-		Graphics g = getGraphics();
-		Font f = new Font("Courier New", Font.BOLD, 14);
-		FontMetrics fm = getFontMetrics(f);
+		String score = "Final score: " + points + " morsels consumed";
 		g.setColor(Color.BLACK);
 		g.setFont(f);
 		g.drawString(lose,(xdim-fm.stringWidth(lose))/2,ydim/2);
+		g.drawString(score,(xdim-fm.stringWidth(score))/2,ydim/2+fm.getHeight()+10);
 	}
 
 	public void actionPerformed(ActionEvent e){
+		Graphics g = getGraphics();
 		if(!inGame){
 			timer.stop();
 			//System.out.println("noot noot!");
-			gameOver();
+			gameOver(g);
 		}
 		else{
 			hit=checkCollision();
 			if(!hit){
-				Graphics g = getGraphics();
 				paint(g);
 			}
 		}
 	}
 
 	public void paint(Graphics g) {
-		//System.out.println("noot noot!");
 		super.paint(g);
 		int[] foodPos=noms.getPos();
 		ArrayList<int[]> snakePos=player.move();
+		String score = "Score: " + points;
 		g.setColor(Color.RED);
 		g.fillOval(foodPos[0],foodPos[1],jointSize,jointSize);
 		g.setColor(Color.GREEN);
 		for(int[] x:snakePos){
 			g.fillOval(x[0],x[1],jointSize,jointSize);
 		}
+		g.setFont(f);
+		g.setColor(Color.BLACK);
+		g.drawString(score,xdim-fm.stringWidth(score)-5,fm.getHeight());
 		Toolkit.getDefaultToolkit().sync();
 		g.dispose();
 	}
