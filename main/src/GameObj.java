@@ -34,21 +34,16 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 		setFocusable(true);
 		setDoubleBuffered(true);
 		addKeyListener(this);
-		timer = new Timer(TICK,this);
-		timer.start();
 		//t0=system.timeNano();
-		////game objects
-		//Specify iniitial position
-		ArrayList<int[]> start = new ArrayList<int[]>();
-		start.add(new int[]{xdim/2,ydim/2});
-		start.add(new int[]{xdim/2,ydim/2+2*jointSize});
-		start.add(new int[]{xdim/2,ydim/2+4*jointSize});
-		player = new Snake(start);
-		//nom nom nom
-		noms = new Food(xdim,ydim);
 		////Graphics objects
 		f = new Font("Courier New", Font.BOLD, 14);
 		fm = getFontMetrics(f);
+		//Link start!
+		init();
+		//Start the clock!
+		timer = new Timer(TICK,this);
+		timer.start();
+
 
 	}
 
@@ -82,51 +77,63 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 		return hit;
 	}
 
+	public void keyPressed(KeyEvent e) {
+		int code = e.getKeyCode();
+		//Pause
+		if(code==KeyEvent.VK_P){
+			pause();
+			return;
+		}
+		else if(code==KeyEvent.VK_R){
+			reset();
+			return;
+		}
+		if(!paused){
+			int dir=player.getDir();
+			if(code==KeyEvent.VK_UP){
+				if(dir!=DOWN){
+					dir=UP;
+					player.setDir(dir);
+				}
+			}
+			else if(code==KeyEvent.VK_DOWN){
+				if(dir!=UP){
+					dir=DOWN;
+					player.setDir(dir);
+				}
+			}
+			else if(code==KeyEvent.VK_LEFT){
+				if(dir!=RIGHT){
+					dir=LEFT;
+					player.setDir(dir);
+				}
+			}
+			else if(code==KeyEvent.VK_RIGHT){
+				if(dir!=LEFT){
+					dir=RIGHT;
+					player.setDir(dir);
+				}
+			}
+		}
+		
+	}
+
 	//handle pausing of game
 	private boolean pause(){
-		if(paused){
-			timer.start();
-			paused=!paused;
-		}
-		else{
-			timer.stop();
-			paused=!paused;
+		if(inGame){
+			if(paused){
+				timer.start();
+				paused=!paused;
+			}
+			else{
+				timer.stop();
+				paused=!paused;
+			}
 		}
 		return paused;
 	}
 
-	public void keyPressed(KeyEvent e) {
-		int code = e.getKeyCode();
-		int dir=player.getDir();
-		if(code==KeyEvent.VK_UP){
-			if(dir!=DOWN){
-				dir=UP;
-				player.setDir(dir);
-			}
-		}
-		else if(code==KeyEvent.VK_DOWN){
-			if(dir!=UP){
-				dir=DOWN;
-				player.setDir(dir);
-			}
-		}
-		else if(code==KeyEvent.VK_LEFT){
-			if(dir!=RIGHT){
-				dir=LEFT;
-				player.setDir(dir);
-			}
-		}
-		else if(code==KeyEvent.VK_RIGHT){
-			if(dir!=LEFT){
-				dir=RIGHT;
-				player.setDir(dir);
-			}
-		}
-		//Pause
-		else if(code==KeyEvent.VK_P)
-			pause();
-	}
-
+	//Draw Game Over strings
 	private void gameOver(Graphics g){
 		String lose = "Game Over";
 		String score = "Final score: " + points + " morsels consumed";
@@ -134,13 +141,25 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 		g.setFont(f);
 		g.drawString(lose,(xdim-fm.stringWidth(lose))/2,ydim/2);
 		g.drawString(score,(xdim-fm.stringWidth(score))/2,ydim/2+fm.getHeight()+10);
+		Toolkit.getDefaultToolkit().sync();
+		g.dispose();
 	}
 
+	//Reset and start new game
+	private void reset(){
+		points=0;
+		inGame=true;
+		paused=false;
+		hit=false;
+		init();
+		timer.restart();
+	}
+
+	//Respond to timer clicks and render frames
 	public void actionPerformed(ActionEvent e){
 		Graphics g = getGraphics();
 		if(!inGame){
 			timer.stop();
-			//System.out.println("noot noot!");
 			gameOver(g);
 		}
 		else{
@@ -167,6 +186,19 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 		g.drawString(score,xdim-fm.stringWidth(score)-5,fm.getHeight());
 		Toolkit.getDefaultToolkit().sync();
 		g.dispose();
+	}
+
+	//initialize snake and food
+	private void init(){
+		//Specify iniitial snake position
+		ArrayList<int[]> start = new ArrayList<int[]>();
+		start.add(new int[]{xdim/2,ydim/2});
+		start.add(new int[]{xdim/2,ydim/2+2*jointSize});
+		start.add(new int[]{xdim/2,ydim/2+3*jointSize});
+		player = new Snake(start);
+		//nom nom nom
+		noms = new Food(xdim,ydim);
+		Toolkit.getDefaultToolkit().sync();
 	}
 
 	public void keyReleased(KeyEvent e) {}
