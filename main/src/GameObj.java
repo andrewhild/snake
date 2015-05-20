@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -27,6 +28,7 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 		ydim=y;
 		setPreferredSize(new Dimension(xdim,ydim));
 		setFocusable(true);
+		setDoubleBuffered(true);
 		addKeyListener(this);
 		timer = new Timer(TICK,this);
 		timer.start();
@@ -142,6 +144,7 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 		for(int[] x:snakePos){
 			g.fillOval(x[0],x[1],jointSize,jointSize);
 		}
+		Toolkit.getDefaultToolkit().sync();
 		g.dispose();
 	}
 
