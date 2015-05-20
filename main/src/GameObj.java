@@ -7,6 +7,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import javax.swing.JPanel;
@@ -119,10 +121,21 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 			pause();
 	}
 
+	private void gameOver(){
+		String lose = "Game Over";
+		Graphics g = getGraphics();
+		Font f = new Font("Courier New", Font.BOLD, 14);
+		FontMetrics fm = getFontMetrics(f);
+		g.setColor(Color.BLACK);
+		g.setFont(f);
+		g.drawString(lose,(xdim-fm.stringWidth(lose))/2,ydim/2);
+	}
+
 	public void actionPerformed(ActionEvent e){
 		if(!inGame){
 			timer.stop();
-			System.out.println("noot noot!");
+			//System.out.println("noot noot!");
+			gameOver();
 		}
 		else{
 			hit=checkCollision();
