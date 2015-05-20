@@ -51,7 +51,7 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 		int[] headPos=snakePos.get(0);
 		int[] nomPos = noms.getPos();
 		//check for nommed food
-		if(((headPos[0]-nomPos[0])<=5)&&((headPos[1]-nomPos[1])<=5)){
+		if((Math.abs(headPos[0]-nomPos[0])<=5)&&(Math.abs(headPos[1]-nomPos[1])<=5)){
 			player.eat();
 			noms=new Food(xdim,ydim);
 		}
