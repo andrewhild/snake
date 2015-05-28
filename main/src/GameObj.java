@@ -57,7 +57,7 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 			noms=new Food(xdim,ydim,jointSize);
 		}
 		//check for wall smack
-		if(headPos[0]<0||headPos[0]>xdim||headPos[1]<0||headPos[1]>ydim){
+		if(headPos[0]<0+jointSize||headPos[0]>xdim-2*jointSize||headPos[1]<0+jointSize||headPos[1]>ydim-2*jointSize){
 			hit=true;
 			inGame=false;
 			return hit;
