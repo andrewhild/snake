@@ -43,8 +43,6 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 		//Start the clock!
 		timer = new Timer(TICK,this);
 		timer.start();
-
-
 	}
 
 	//check for collisions with self, walls, food
@@ -56,7 +54,7 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 		if((Math.abs(headPos[0]-nomPos[0])<=5)&&(Math.abs(headPos[1]-nomPos[1])<=5)){
 			player.eat();
 			points++;
-			noms=new Food(xdim,ydim);
+			noms=new Food(xdim,ydim,jointSize);
 		}
 		//check for wall smack
 		if(headPos[0]<0||headPos[0]>xdim||headPos[1]<0||headPos[1]>ydim){
@@ -197,7 +195,7 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 		start.add(new int[]{xdim/2,ydim/2+3*jointSize});
 		player = new Snake(start);
 		//nom nom nom
-		noms = new Food(xdim,ydim);
+		noms = new Food(xdim,ydim,jointSize);
 		Toolkit.getDefaultToolkit().sync();
 	}
 
