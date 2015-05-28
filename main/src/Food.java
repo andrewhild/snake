@@ -2,14 +2,13 @@ package main;
 
 public class Food{
 
-	private int xdim,ydim,size,xpos,ypos;
+	private int xdim,ydim,xpos,ypos;
 
-	public Food (int x, int y, int s){
+	public Food (int x, int y, int size){
 		xdim=x;
 		ydim=y;
-		size=s;
-		xpos=(int)(Math.random()*(xdim-size));
-		ypos=(int)(Math.random()*(ydim-size));
+		xpos=(int)(size*Math.round((Math.random()*(xdim-size))/size));
+		ypos=(int)(size*Math.round((Math.random()*(ydim-size))/size));
 	}
 
 	public int[] getPos(){

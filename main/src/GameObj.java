@@ -57,7 +57,7 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 			noms=new Food(xdim,ydim,jointSize);
 		}
 		//check for wall smack
-		if(headPos[0]<0+jointSize||headPos[0]>xdim-2*jointSize||headPos[1]<0+jointSize||headPos[1]>ydim-2*jointSize){
+		if(headPos[0]<0||headPos[0]>xdim-jointSize||headPos[1]<0||headPos[1]>ydim-jointSize){
 			hit=true;
 			inGame=false;
 			return hit;
@@ -190,9 +190,9 @@ public class GameObj extends JPanel implements KeyListener,ActionListener,Direct
 	private void init(){
 		//Specify iniitial snake position
 		ArrayList<int[]> start = new ArrayList<int[]>();
-		start.add(new int[]{xdim/2,ydim/2});
-		start.add(new int[]{xdim/2,ydim/2+2*jointSize});
-		start.add(new int[]{xdim/2,ydim/2+3*jointSize});
+		start.add(new int[]{10*Math.round(((xdim-jointSize)/2)/jointSize),10*Math.round(((ydim-jointSize)/2)/jointSize)});
+		start.add(new int[]{(xdim-jointSize)/2,ydim/2+2*jointSize});
+		start.add(new int[]{(xdim-jointSize)/2,ydim/2+3*jointSize});
 		player = new Snake(start);
 		//nom nom nom
 		noms = new Food(xdim,ydim,jointSize);
